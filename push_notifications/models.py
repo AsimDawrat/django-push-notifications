@@ -158,14 +158,36 @@ class APNSDevice(Device):
 		verbose_name = _("APNS device")
 
 	def send_message(self, message, creds=None, **kwargs):
-		from .apns import apns_send_message
+		# from .apns import apns_send_message
+		from aioapns import APNs, NotificationRequest, PushType
+		from uuid import uuid4
+		from .conf import get_manager
 
-		return apns_send_message(
-			registration_id=self.registration_id,
-			alert=message,
-			application_id=self.application_id, creds=creds,
-			**kwargs
+		cert =  get_manager().get_apns_certificate(self.application_id)
+		apns_cert_client = APNs(
+			client_cert=cert,
+			use_sandbox=False,
 		)
+
+		request = NotificationRequest(
+        device_token=self.registration_id,
+        message = {
+            "aps": {
+                "alert": message,
+                "badge": "",
+            }
+        },
+        notification_id=str(uuid4()),  # optional
+        time_to_live=3,                # optional
+        push_type=PushType.ALERT,      # optional
+    	)
+		apns_cert_client.send_notification(request)
+		# return apns_send_message(
+		# 	registration_id=self.registration_id,
+		# 	alert=message,
+		# 	application_id=self.application_id, creds=creds,
+		# 	**kwargs
+		# )
 
 
 class WNSDeviceManager(models.Manager):

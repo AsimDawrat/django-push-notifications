@@ -164,6 +164,7 @@ class APNSDevice(Device):
 		from .conf import get_manager
 
 		cert =  get_manager().get_apns_certificate(self.application_id)
+		print("Cert in siospns \n", cert)
 		apns_cert_client = APNs(
 			client_cert=cert,
 			use_sandbox=False,

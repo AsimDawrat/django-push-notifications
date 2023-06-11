@@ -165,7 +165,7 @@ class APNSDevice(Device):
 
 		# cert =  get_manager().get_apns_certificate(self.application_id)
 		print("Cert in aiospns \n", creds)
-		print("Cert in aiospns \n", kwargs)
+		print("kwargs \n", kwargs['key_id'])
 
 		apns_key_client = APNs(
 			key=creds,
@@ -174,7 +174,7 @@ class APNSDevice(Device):
 			topic=kwargs['bundle_id'],  # Bundle ID
 			use_sandbox=kwargs['sandbox'],
 		)
-		print("Cert in aioapns \n", apns_key_client)
+		print("Cert \n", apns_key_client)
 		request = NotificationRequest(
         device_token=self.registration_id,
         message = {

@@ -157,11 +157,13 @@ class APNSDevice(Device):
 	class Meta:
 		verbose_name = _("APNS device")
 
-	async def send_message(self, message, creds=None, **kwargs):
+	def send_message(self, message, creds=None, **kwargs):
 		# from .apns import apns_send_message
 		from aioapns import APNs, NotificationRequest, PushType
 		from uuid import uuid4
 		from .conf import get_manager
+		import asyncio
+		from asgiref.sync import async_to_sync, sync_to_async
 
 		# cert =  get_manager().get_apns_certificate(self.application_id)
 		print("Cert in aiospns \n", creds)
@@ -187,7 +189,7 @@ class APNSDevice(Device):
         time_to_live=3,                # optional
         push_type=PushType.ALERT,      # optional
     	)
-		await apns_key_client.send_notification(request)
+		return async_to_sync(apns_key_client.send_notification(request))
 		# return apns_send_message(
 		# 	registration_id=self.registration_id,
 		# 	alert=message,

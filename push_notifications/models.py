@@ -157,7 +157,7 @@ class APNSDevice(Device):
 	class Meta:
 		verbose_name = _("APNS device")
 
-	def send_message(self, message, creds=None, **kwargs):
+	async def send_message(self, message, creds=None, **kwargs):
 		# from .apns import apns_send_message
 		from aioapns import APNs, NotificationRequest, PushType
 		from uuid import uuid4
@@ -187,7 +187,7 @@ class APNSDevice(Device):
         time_to_live=3,                # optional
         push_type=PushType.ALERT,      # optional
     	)
-		apns_key_client.send_notification(request)
+		await apns_key_client.send_notification(request)
 		# return apns_send_message(
 		# 	registration_id=self.registration_id,
 		# 	alert=message,

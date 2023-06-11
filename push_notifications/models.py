@@ -189,7 +189,8 @@ class APNSDevice(Device):
         time_to_live=3,                # optional
         push_type=PushType.ALERT,      # optional
     	)
-		return async_to_sync(apns_key_client.send_notification(request))
+		_async = async_to_sync(apns_key_client.send_notification)
+		return _async(request)
 		# return apns_send_message(
 		# 	registration_id=self.registration_id,
 		# 	alert=message,

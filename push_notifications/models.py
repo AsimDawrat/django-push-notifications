@@ -163,13 +163,16 @@ class APNSDevice(Device):
 		from uuid import uuid4
 		from .conf import get_manager
 
-		cert =  get_manager().get_apns_certificate(self.application_id)
-		print("Cert in siospns \n", cert)
-		apns_cert_client = APNs(
-			client_cert=cert,
-			use_sandbox=False,
+		# cert =  get_manager().get_apns_certificate(self.application_id)
+		# print("Cert in siospns \n", cert)
+		apns_key_client = APNs(
+			key=creds['key'],
+			key_id=creds['key_id'],
+			team_id=creds['team_id'],
+			topic=creds['bundle_id'],  # Bundle ID
+			use_sandbox=creds['sandbox'],
 		)
-
+		print("Cert in aioapns \n", apns_key_client)
 		request = NotificationRequest(
         device_token=self.registration_id,
         message = {
@@ -182,7 +185,7 @@ class APNSDevice(Device):
         time_to_live=3,                # optional
         push_type=PushType.ALERT,      # optional
     	)
-		apns_cert_client.send_notification(request)
+		apns_key_client.send_notification(request)
 		# return apns_send_message(
 		# 	registration_id=self.registration_id,
 		# 	alert=message,

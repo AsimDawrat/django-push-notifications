@@ -164,13 +164,15 @@ class APNSDevice(Device):
 		from .conf import get_manager
 
 		# cert =  get_manager().get_apns_certificate(self.application_id)
-		# print("Cert in siospns \n", cert)
+		print("Cert in aiospns \n", creds)
+		print("Cert in aiospns \n", kwargs)
+
 		apns_key_client = APNs(
-			key=creds['key'],
-			key_id=creds['key_id'],
-			team_id=creds['team_id'],
-			topic=creds['bundle_id'],  # Bundle ID
-			use_sandbox=creds['sandbox'],
+			key=creds,
+			key_id=kwargs['key_id'],
+			team_id=kwargs['team_id'],
+			topic=kwargs['bundle_id'],  # Bundle ID
+			use_sandbox=kwargs['sandbox'],
 		)
 		print("Cert in aioapns \n", apns_key_client)
 		request = NotificationRequest(
